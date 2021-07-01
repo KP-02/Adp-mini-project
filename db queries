@@ -1,0 +1,29 @@
+CREATE DATABASE quick_quiz; 
+//go to the quick_quiz in phpMyAdmin
+CREATE TABLE quiz_list(
+    quiz_id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    quiz_name VARCHAR(255) NOT NULL,
+    author_name VARCHAR(255) NOT NULL
+);
+CREATE TABLE question_table(
+    quiz_id INT(11) NOT NULL,
+    quiz_name VARCHAR(255) NOT NULL,
+    question_id INT(11) NOT NULL,
+    question VARCHAR(255) NOT NULL,
+    option_a VARCHAR(255) NOT NULL,
+    option_b VARCHAR(255) NOT NULL,
+    option_c VARCHAR(255) NOT NULL,
+    option_d VARCHAR(255) NOT NULL
+);
+CREATE TABLE answer_table(
+    quiz_id INT(11) NOT NULL,
+    quiz_name VARCHAR(255) NOT NULL,
+    question_id INT(11) NOT NULL,
+    correct_option INT(11) NOT NULL
+);
+CREATE TABLE user_input(
+    quiz_id INT(11) NOT NULL,
+    quiz_name VARCHAR(255) NOT NULL,
+    question_id INT(11) NOT NULL,
+    user_answer INT(11)
+);

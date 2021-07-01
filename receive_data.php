@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>receive data</title>
 </head>
+
 <body>
     <?php
+    session_start();
     $answers_string = $_POST['answers_string'];
     $answers_array = str_split($answers_string);
+    $number_of_questions = $_SESSION['number_of_questions'];
+    $quiz_name = $_SESSION['quiz_name'];
+    $quiz_id = $_SESSION['quiz_id'];
     #not entirely sure if we need the for loop 
     for ($i = 0; $i < count($answers_array); $i++) {
         $answers_array[$i] = (int)$answers_array[$i];
@@ -24,21 +30,16 @@
         echo 'Connection to database failed';
     }
     #inserting into the database
-    $question_selection_query = 'select id from question_table where teacher_id = 1';
-    $question_ids = mysqli_query($connection, $question_selection_query);
-    $question_ids_array = array();
-    while ( $row = mysqli_fetch_assoc($question_ids)) {
-        array_push($question_ids_array,$row['id']);
-    }
     $i = 0;
-    while ($i < 5) {
-    $insertion_query = "INSERT INTO user_input(question_id,answer_value) VALUES ('$question_ids_array[$i]','$answers_array[$i]')";
-    echo $question_ids_array[$i]."-".$answers_array[$i]."<br>";
-    if(!mysqli_query($connection,$insertion_query)) {
-        echo "Error in insertion".mysqli_error($connection);
+    while ($i < $number_of_questions) {
+        $insertion_query = "UPDATE user_input SET user_answer = '$answers_array[$i]' WHERE quiz_id = '$quiz_id' and quiz_name = '$quiz_name' and question_id = $i+1";
+        if (!mysqli_query($connection, $insertion_query)) {
+            echo "Error in insertion" . mysqli_error($connection);
+        }
+        $i++;
     }
-    $i++; 
-    }
+    include('score.php');
     ?>
 </body>
+
 </html>
